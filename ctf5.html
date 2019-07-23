@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+      function getFlag(color){
+        $.get('http://ctf.unixist.com:3389/capture?flag=' + color, function(data, status) {
+          console.log('status: ', status);
+          console.log('data: ', `${data}`);
+        }).fail(function() {
+          console.log("failure");
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <p>
+      <input type="button" value="Capture blue flag!" onclick="getFlag('blue');" />
+    </p>
+
+    <p>
+      <input type="button" value="Capture red flag!" onclick="getFlag('red');" />
+    </p>
+
+    <p>
+      <input type="button" value="Capture orange flag!" onclick="getFlag('orange');" />
+    </p>
+
+    <p>
+      <input type="button" value="Capture green flag!" onclick="getFlag('green');" />
+    </p>
+  </body>
+</html>

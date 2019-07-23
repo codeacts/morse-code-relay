@@ -1,0 +1,73 @@
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>>
+		<script type="text/javascript">
+			var timer = null;
+			var connection = null;
+			function setHolder(color) {
+				$('div#holder').css('background', color);
+				if (timer) {
+					clearInterval(timer);
+				}
+				timer = setInterval(function(){bumpScore(color)}, 1000);
+			}
+			function bumpScore(color) {
+				console.log("bumping " + color);
+				num = parseInt($('div#flag-'+color).text(), 10);
+				console.log(num);
+				num++;
+				$('div#flag-'+color).text(num);
+			}
+$(function () {
+  "use strict";
+  // for better performance - to avoid searching in DOM
+  var content = $('#content');
+  var input = $('#input');
+  var status = $('#status');
+  // my color assigned by the server
+  var myColor = false;
+  // my name sent to the server
+  var myName = false;
+  // if user is running mozilla then use it's built-in WebSocket
+  window.WebSocket = window.WebSocket 
+ window.MozWebSocket;
+  if (!window.WebSocket) {
+	  console.log("no websocket support :(");
+    return;
+  }
+  var reconnectInterval = 1000 * 5;
+  var connect = function(){
+	  connection = new WebSocket('ws://ctf.unixist.com');
+	  connection.onopen = function () {
+		  console.log("connected!");
+	  };
+	  connection.onerror = function (error) {
+		  console.log("connection failed: " + error);
+	  };
+	  connection.onmessage = function (message) {
+		  console.log("incoming!");
+		  setHolder(message.data);
+	  };
+	  connection.onclose = function (message) {
+		  console.log("socket closed");
+		  setTimeout(connect, reconnectInterval);
+	  };
+  };
+  connect();
+});
+		</script>
+	</head>
+	<body onbeforeunload='connection.close()'>
+		<div id="board">
+			<h1>Current team</h1>
+			<div id="holder" style="float:left; height: 0; width:50%; background:red; padding-bottom:50%; border-style:dashed">
+			</div>
+			<div id="flags" style="width:25%; text-align:center; position:absolute; right:0px; color:white">
+				<div onclick="setHolder('red');" id="flag-red" style="height: 0; width:50%; background:red; padding-bottom:50%">0</div>
+				<div onclick="setHolder('blue');" id="flag-blue" style="height: 0; width:50%; background:blue; padding-bottom:50%">0</div>
+				<div onclick="setHolder('green');" id="flag-green" style="height: 0; width:50%; background:green; padding-bottom:50%">0</div>
+				<div onclick="setHolder('orange');" id="flag-orange" style="height: 0; width:50%; background:orange; padding-bottom:50%">0</div>
+			</div>
+		</div>
+	</body>
+</html>

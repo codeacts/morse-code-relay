@@ -1,0 +1,13 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+      $.get('http://ctf.unixist.com:3389/capture?flag=blue', function(data, status) {
+        console.log('status: ', status);
+        console.log('data: ', `${data}`);
+      }).fail(function() {
+        console.log("failure");
+      });
+    </script>
+  </head>
+</html>
